@@ -44,24 +44,24 @@ The application will be available at: `http://localhost:8000`
 ## 📁 Project Structure
 
 AI-Devs-3/
-├── ui/                         # Streamlit user interface
-│   ├── app.py                  # Main application
-│   ├── components/             # Components (flags, files)
-│   └── views/                  # Task views
-├── tasks/                      # Solution logic
-│   └── week1/
-│       └── episode01/
-│           └── robot_login/
-│               ├── models/     # Main logic
-│               ├── services/   # Services (web, llm, files)
-│               └── parsers/    # HTML parsers
-├── services/                   # Shared services
-│   └── llm/                    # LLM models handling
-└── files_storage/              # Storage for downloaded files
-    ├── flags.md                # Found flags
-    ├── home_page/              # UI assets
-    └── week1/                  # Week 1 files
-        └── episode01/          # Episode 1 files
+├── ui/                         # Streamlit user interface  
+│   ├── app.py                  # Main application  
+│   ├── components/             # Components (flags, files)  
+│   └── views/                  # Task views  
+├── tasks/                      # Solution logic  
+│   └── week1/  
+│       └── episode01/  
+│           └── robot_login/  
+│               ├── models/     # Main logic  
+│               ├── services/   # Services (web, llm, files)  
+│               └── parsers/    # HTML parsers  
+├── services/                   # Shared services  
+│   └── llm/                    # LLM models handling  
+└── files_storage/              # Storage for downloaded files  
+    ├── flags.md                # Found flags  
+    ├── home_page/              # UI assets  
+    └── week1/                  # Week 1 files  
+        └── episode01/          # Episode 1 files  
 
 
 ## ⚙️ Configuration
