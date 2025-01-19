@@ -43,6 +43,7 @@ The application will be available at: `http://localhost:8000`
 
 ## 📁 Project Structure
 
+```bash
 AI-Devs-3/
 ├── ui/                         # Streamlit user interface  
 │   ├── app.py                  # Main application  
@@ -62,7 +63,7 @@ AI-Devs-3/
     ├── home_page/              # UI assets  
     └── week1/                  # Week 1 files  
         └── episode01/          # Episode 1 files  
-
+```
 
 ## ⚙️ Configuration
 
