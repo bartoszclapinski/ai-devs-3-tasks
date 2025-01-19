@@ -1,0 +1,35 @@
+# Configuration files
+.env
+.env.*
+
+# Flags and solutions
+files_storage/flags.md
+files_storage/week*/
+files_storage/*/episode*/
+
+# Lecture materials
+**/content/*-Lecture.md
+**/content/Website-Files/
+**/content/Website-Files/*
+
+# Temporary file directories
+__pycache__/
+.pytest_cache/
+*.pyc
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# QA memory files
+qa_memory.json
+**/qa_memory.json 
