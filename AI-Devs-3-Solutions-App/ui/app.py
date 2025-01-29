@@ -171,42 +171,52 @@ def main():
     show_flags = FlagsViewer.add_to_sidebar()
     show_files = FilesViewer.add_to_sidebar()
     
-    # Dodaj separator i przyciski z linkami na dole sidebara
-    st.sidebar.markdown("<div style='flex-grow: 1;'></div>", unsafe_allow_html=True)  # Spacer
-    st.sidebar.markdown("---")  # separator
-    
-    # Style dla przycisków z linkami
+    # Style dla elementów w sidebarze
     st.markdown("""
         <style>
-        /* Przyciski z linkami na dole */
-        .bottom-sidebar-buttons {
-            position: fixed;
-            bottom: 0;
-            padding-bottom: 1rem;
-            width: inherit;
+        /* Separatory */
+        section[data-testid="stSidebar"] hr {
+            margin: 10px 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-top: 1px solid rgba(255,255,255,0.1) !important;
         }
         
-        section[data-testid="stSidebar"] .bottom-sidebar-buttons .stButton button {
+        /* Wszystkie przyciski w sidebarze */
+        section[data-testid="stSidebar"] .stButton > button {
             width: 100%;
             text-align: left;
-            padding: 0.5rem 1rem !important;
-            min-height: unset !important;
+            padding: 0.3rem 0.5rem !important;
+            min-height: 40px !important;
             height: auto !important;
-            line-height: 1.5 !important;
-            margin-bottom: 0.5rem;
-        }        
+            line-height: 1.2 !important;
+            margin: 2px 0 !important;
+        }
+
+        /* Przyciski flag i plików */
+        section[data-testid="stSidebar"] > div > div > div > .stButton {
+            margin: 5px 0 !important;
+        }
+        
+        /* Przyciski na dole */
+        .bottom-buttons {
+            padding: 0;
+            margin-top: -5px;  /* Lekko podciągnij do góry */
+        }
+        </style>
     """, unsafe_allow_html=True)
     
-    # Kontener na przyciski z linkami
-    st.sidebar.markdown('<div class="bottom-sidebar-buttons">', unsafe_allow_html=True)
+    # Dodaj separator
+    st.sidebar.markdown("<hr>", unsafe_allow_html=True)
     
-    if st.sidebar.button("🏢 Centrala AI Devs"):
-        webbrowser.open_new_tab("https://centrala.ag3nts.org/")
-        
-    if st.sidebar.button("🎓 Brave Courses"):
-        webbrowser.open_new_tab("https://bravecourses.circle.so/")
-    
-    st.sidebar.markdown('</div>', unsafe_allow_html=True)
+    # Dodaj przyciski na dole
+    with st.sidebar:
+        st.markdown('<div class="bottom-buttons">', unsafe_allow_html=True)
+        if st.button("🏢 Centrala AI Devs"):
+            webbrowser.open_new_tab("https://centrala.ag3nts.org/")
+        if st.button("🎓 Brave Courses"):
+            webbrowser.open_new_tab("https://bravecourses.circle.so/")
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # Main content
     if show_flags:
