@@ -1,12 +1,14 @@
 import streamlit as st
 import os
 from pathlib import Path
+from ui.views.base_view import BaseView
 
-class FilesViewer:
+class FilesViewer(BaseView):
     FILES_ROOT = "files_storage"
 
-    @staticmethod
-    def add_to_sidebar():
+    @classmethod
+    def add_to_sidebar(cls):
+        viewer = cls()
         st.markdown("""
             <style>
             section[data-testid="stSidebar"] .stButton button {
@@ -19,10 +21,9 @@ class FilesViewer:
             }
             </style>
         """, unsafe_allow_html=True)
-        return st.sidebar.button("📁 Pokaż pobrane pliki")
+        return st.sidebar.button(viewer.get_text("sidebar.files_button"))
 
-    @staticmethod
-    def show_files():
+    def show(self):
         st.markdown("""
             <style>
             .file-entry {
@@ -41,17 +42,17 @@ class FilesViewer:
             </style>
         """, unsafe_allow_html=True)
         
-        st.subheader("📁 Pobrane pliki")
+        st.subheader(self.get_text("files_viewer.title"))
         
-        if not os.path.exists(FilesViewer.FILES_ROOT):
-            st.info("Nie znaleziono żadnych plików.")
+        if not os.path.exists(self.FILES_ROOT):
+            st.info(self.get_text("files_viewer.no_files"))
             return
 
         # Przejdź przez strukturę katalogów
-        for week in sorted(os.listdir(FilesViewer.FILES_ROOT)):
+        for week in sorted(os.listdir(self.FILES_ROOT)):
             if week.startswith('week'):
                 st.markdown(f"### Week {week[-1]}")
-                week_path = Path(FilesViewer.FILES_ROOT) / week
+                week_path = Path(self.FILES_ROOT) / week
                 
                 for episode in sorted(os.listdir(week_path)):
                     if episode.startswith('episode'):

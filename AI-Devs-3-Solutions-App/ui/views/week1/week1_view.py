@@ -4,8 +4,15 @@ import streamlit as st
 
 class Week1View(BaseView):
     def show(self, selected_episode: str):
-        if selected_episode == "Episode 1 - Robot Login":
+        # Sprawdzamy po tytule epizodu z tłumaczeń
+        episode1_title = self.get_text("week1.episode1.title")
+        episode2_title = self.get_text("week1.episode2.title")
+        
+        if selected_episode == episode1_title:
             RobotLoginView().show()
-        elif selected_episode == "Episode 2 - Coming Soon":
-            self.render_header("Episode 2")
-            st.write("Coming soon...") 
+        elif selected_episode == episode2_title:
+            self.render_header(episode2_title)
+            st.write(self.get_text("week1.episode2.coming_soon"))
+
+        # Sprawdźmy, czy nie ma tu dodatkowych styli
+        # Szczególnie w RobotLoginView 

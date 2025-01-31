@@ -83,27 +83,18 @@ class RobotLoginView(BaseView):
             /* Zmniejsz odstęp między selectboxem a przyciskiem */
             .stButton {
                 margin-top: 0.5rem !important;
-            }
-            
-            /* Dostosuj szerokość selectboxa dla wyboru modelu */
-            div[data-testid="stFormSelect"] div[data-baseweb="select"] {
-                width: 300px !important;
-            }
+            }          
             
             /* Kontener selectboxa */
             div[data-baseweb="select"] {
                 width: 300px !important;
             }
             
-            /* Specyficzne style dla wyboru modelu LLM */
+            /* Specyficzne styles dla wyboru modelu LLM */
             label:contains("Wybierz model LLM") + div [data-baseweb="select"] {
                 width: 300px !important;
             }
             
-            /* Przycisk */
-            .stButton > button {
-                width: 180px !important;
-            }
             
             /* Całkowicie usuń domyślne style zakładek */
             .stTabs [data-baseweb="tab-highlight"] {
@@ -147,7 +138,7 @@ class RobotLoginView(BaseView):
                 background-color: #2e7d32 !important;
                 border-color: #2e7d32 !important;
                 color: white !important;
-                width: 300px !important;
+                
             }
             
             .stButton > button:hover {
@@ -158,18 +149,8 @@ class RobotLoginView(BaseView):
             
             /* Style dla selectboxa tylko w sekcji implementacji */
             .implementation-section div[data-testid="stFormSelect"] div[data-baseweb="select"] {
-                width: 180px !important;
-            }
-            
-            /* Kontener selectboxa tylko w sekcji implementacji */
-            .implementation-section div[data-baseweb="select"] {
-                width: 180px !important;
-            }
-            
-            /* Specyficzne style dla wyboru modelu LLM tylko w sekcji implementacji */
-            .implementation-section label:contains("Wybierz model LLM") + div [data-baseweb="select"] {
-                width: 180px !important;
-            }
+                
+            }           
 
             /* Style dla zakładek i separatora */
             .stTabs {
@@ -222,16 +203,82 @@ class RobotLoginView(BaseView):
             [data-testid="stCheckbox"] > label > div[role="checkbox"]:hover {
                 border-color: #2e7d32 !important;
             }
+
+            /* Style dla sekcji implementacji */
+            .implementation-section {
+                background-color: #1e1e1e;
+                padding: 1rem;
+                border-radius: 4px;
+                margin-top: 1rem;
+            }
+            
+            /* Style TYLKO dla przycisku uruchomienia w sekcji implementacji */
+            [data-testid="episode1_task"] {
+                width: 300px !important;
+            }
+                    
+            div[data-baseweb="select"] {
+                width: auto;
+            }
+
+            /* Style dla selectboxa z key="llm_model_selector" */
+            [key="llm_model_selector"] {
+                width: 300px;
+            }
+            
+            /* Kontener dla kontrolek implementacji */
+            .implementation-controls {
+                margin-top: 1rem;
+            }
+            
+            /* Wszystkie selectboxy domyślnie auto */
+            div[data-baseweb="select"] {
+                width: auto !important;
+            }
+            
+            /* Style dla selectboxa w pierwszej kolumnie */
+            [data-testid="column"] div[data-baseweb="select"] {
+                width: 300px !important;
+            }
+            
+            /* Style dla przycisku uruchomienia */
+            [data-testid="episode1_task"] {
+                width: 300px !important;
+            }
+            
+            /* Style dla radio buttonów - w poziomie */
+            div[data-testid="stRadio"] > div {
+                display: flex !important;
+                align-items: center !important;
+                gap: 2rem !important;
+            }
+            
+            /* Label dla radio buttonów w jednej linii */
+            div[data-testid="stRadio"] label {
+                display: flex !important;
+                align-items: center !important;
+                gap: 0.5rem !important;
+            }
+            
+            /* Style dla przycisku uruchomienia */
+            [data-testid="episode1_task"] {
+                width: 300px !important;
+            }
+            
             </style>
         """, unsafe_allow_html=True)
 
-        self.render_header("Week 1 - Episode 1 - Robot Login")
+        self.render_header(self.get_text("week1.episode1.title"))
         
         st.markdown("### Cel zadania:")
         st.markdown("Zalogować się do systemu robotów i pobrać firmware.")
 
         # Tworzenie zakładek
-        tab1, tab2, tab3 = st.tabs(["📋 Wymagania", "💡 Rozwiązanie", "📝 Treść zadania"])
+        tab1, tab2, tab3 = st.tabs([
+            self.get_text("week1.episode1.tabs.requirements"),
+            self.get_text("week1.episode1.tabs.solution"),
+            self.get_text("week1.episode1.tabs.task")
+        ])
         
         with tab1:
             st.markdown("""                            
@@ -300,24 +347,31 @@ class RobotLoginView(BaseView):
             do generowania odpowiedzi na pytania.
             """)
 
-            # Kontener dla selectboxa i przycisku
-            st.markdown('<div class="implementation-section">', unsafe_allow_html=True)
-            
+            # Kontener dla kontrolek
+            st.markdown('<div class="implementation-controls">', unsafe_allow_html=True)
+
             # Checkbox do kontroli użycia cache'a
-            use_cache = st.checkbox("Użyj pamięci cache", value=True, 
-                                   help="Jeśli zaznaczone, program będzie używał wcześniej zapisanych poprawnych odpowiedzi")
-            
-            # Wybór modelu
-            selected_model = st.selectbox(
-                "Wybierz model LLM:",
-                LLMFactory.get_available_models(),
-                index=0
+            use_cache = st.checkbox(
+                self.get_text("week1.episode1.implementation.use_cache"), 
+                value=True,
+                help=self.get_text("week1.episode1.implementation.cache_help"),
+                key="use_cache_checkbox"
             )
-            
+
+            # Radio buttons w poziomie
+            selected_model = st.radio(
+                "Wybierz model LLM:",  # Label w tej samej linii
+                LLMFactory.get_available_models(),
+                key="llm_model_selector",
+                horizontal=True  # Układamy w poziomie
+            )
+
             # Przycisk uruchomienia
-            if st.button("🚀 Uruchom rozwiązanie", key="episode1_task", type="primary"):
+            if st.button(self.get_text("week1.episode1.implementation.run_button"), 
+                        key="episode1_task",
+                        type="primary"):
                 self._run_task(selected_model, use_cache)
-                
+
             st.markdown('</div>', unsafe_allow_html=True)
 
     def _run_task(self, model_name: str, use_cache: bool):

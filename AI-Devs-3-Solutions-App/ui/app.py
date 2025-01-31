@@ -20,9 +20,15 @@ def load_translations(lang: str) -> dict:
         return json.load(file)
 
 def get_text(key: str) -> str:
-    """Pobierz tekst w wybranym języku"""
-    translations = st.session_state.translations
-    return translations.get(key, key)
+    """Get translated text using nested keys (e.g., 'week1.episode1.title')"""
+    try:
+        keys = key.split('.')
+        value = st.session_state.translations
+        for k in keys:
+            value = value[k]
+        return value
+    except (KeyError, AttributeError):
+        return key
 
 def init_session_state():
     """Inicjalizacja stanu sesji"""
@@ -31,9 +37,8 @@ def init_session_state():
     if 'translations' not in st.session_state:
         st.session_state.translations = load_translations(st.session_state.language)
 
-def change_language():
+def change_language(lang: str):
     """Zmiana języka i przeładowanie tłumaczeń"""
-    lang = 'en' if st.session_state.language == 'pl' else 'pl'
     st.session_state.language = lang
     st.session_state.translations = load_translations(lang)
     st.rerun()
@@ -162,57 +167,12 @@ def main():
     gb_flag_path = Path(__file__).parent.parent / "translations" / "icons" / "united-kingdom.png"
 
     pl_flag_base64 = get_image_base64(pl_flag_path)
-    gb_flag_base64 = get_image_base64(gb_flag_path)
-
-    # Style dla flag
-    st.markdown("""
-        <style>
-        .flag-button {
-            width: 35px;  /* Zmniejszona szerokość */
-            height: 25px;  /* Proporcjonalna wysokość */
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-            display: block;
-            margin: 0 auto;
-        }
-        .flag-button:hover {
-            opacity: 1;
-        }
-        .flag-button.active {
-            opacity: 1;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    # Style dla przycisków z flagami
-    st.markdown("""
-        <style>
-        .language-switch .stButton > button {
-            background-color: #2e7d32 !important;
-            border: none !important;
-            padding: 5px 15px !important;
-            width: 80px !important;
-            min-height: unset !important;
-            margin: 0 !important;
-            font-weight: 500 !important;
-            border-radius: 4px !important;
-        }
-        
-        .language-switch .stButton > button:disabled {
-            opacity: 1 !important;
-        }
-        
-        .language-switch .stButton > button:not(:disabled) {
-            opacity: 0.7 !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
+    gb_flag_base64 = get_image_base64(gb_flag_path)    
+    
     # Przełącznik języka
     st.sidebar.markdown('<div class="language-switch">', unsafe_allow_html=True)
     col1, col2 = st.sidebar.columns(2)
-
+    
     with col1:
         if st.button("PL", key="pl_lang", disabled=st.session_state.language=='pl'):
             st.session_state.language = 'pl'
@@ -296,27 +256,30 @@ def main():
     
     # Wybór tygodnia z tłumaczeniem
     selected_week = st.sidebar.selectbox(
-        get_text("select_week"),
-        [get_text("choose_week"), "Week 1"],
+        get_text("common.select_week"),
+        [get_text("common.choose_week"), "Week 1"],
         index=0
     )
     
     # Wybór epizodu z tłumaczeniem
     episodes = [
-        get_text("choose_episode"),
-        get_text("episode1_title"),
-        get_text("episode2_title")
+        get_text("common.choose_episode"),
+        get_text("week1.episode1.title"),
+        get_text("week1.episode2.title")
     ]
     selected_episode = st.sidebar.selectbox(
-        get_text("select_episode"),
+        get_text("common.select_episode"),
         episodes,
         index=0,
-        disabled=selected_week == get_text("choose_week")
+        disabled=selected_week == get_text("common.choose_week")
     )
     
     # Przyciski z tłumaczeniami
-    show_flags = FlagsViewer.add_to_sidebar()
-    show_files = FilesViewer.add_to_sidebar()
+    files_viewer = FilesViewer()
+    flags_viewer = FlagsViewer()
+    
+    show_flags = flags_viewer.add_to_sidebar()
+    show_files = files_viewer.add_to_sidebar()
     
     # Style dla elementów w sidebarze
     st.markdown("""
@@ -359,21 +322,22 @@ def main():
     # Przyciski na dole z tłumaczeniami
     with st.sidebar:
         st.markdown('<div class="bottom-buttons">', unsafe_allow_html=True)
-        if st.button("🏢 " + get_text("centrala_button")):
+        if st.button("🏢 " + get_text("sidebar.centrala_button")):
             webbrowser.open_new_tab("https://centrala.ag3nts.org/")
-        if st.button("🎓 " + get_text("courses_button")):
+        if st.button("🎓 " + get_text("sidebar.courses_button")):
             webbrowser.open_new_tab("https://bravecourses.circle.so/")
         st.markdown('</div>', unsafe_allow_html=True)
     
     # Main content
     if show_flags:
-        FlagsViewer.show_flags()
+        flags_viewer.show()
     elif show_files:
-        FilesViewer.show_files()
-    elif selected_week != get_text("choose_week") and selected_episode != get_text("choose_episode"):
+        files_viewer.show()
+    elif selected_week != get_text("common.choose_week") and selected_episode != get_text("common.choose_episode"):
         Week1View().show(selected_episode)
     else:
-        WelcomeView.show()
+        welcome_view = WelcomeView()
+        welcome_view.show()
 
     # Style dla obrazu w WelcomeView
     st.markdown("""
@@ -382,6 +346,15 @@ def main():
         div[data-testid="stImage"] > div:first-child {
             margin-top: -100px !important;
         }       
+        </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+        <style>
+        /* Bardziej specyficzny selektor dla przycisków w sidebarze */
+        section[data-testid="stSidebar"] [data-testid="stHorizontalBlock"] {             
+        }        
+        
         </style>
     """, unsafe_allow_html=True)
 
