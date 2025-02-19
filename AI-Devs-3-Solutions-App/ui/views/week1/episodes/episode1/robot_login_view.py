@@ -268,116 +268,63 @@ class RobotLoginView(BaseView):
             </style>
         """, unsafe_allow_html=True)
 
-        self.render_header(self.get_text("week1.episode1.title"))
-        
-        st.markdown("### Cel zadania:")
-        st.markdown("Zalogować się do systemu robotów i pobrać firmware.")
+        # Tytuł
+        st.markdown(f"## {self.get_text('week1.episode1.title')}")
+        st.markdown(f"### {self.get_text('week1.episode1.subtitle')}")
+        st.markdown(self.get_text('week1.episode1.description'))
 
-        # Tworzenie zakładek
+        # Zakładki
         tab1, tab2, tab3 = st.tabs([
             self.get_text("week1.episode1.tabs.requirements"),
             self.get_text("week1.episode1.tabs.solution"),
             self.get_text("week1.episode1.tabs.task")
         ])
-        
+
         with tab1:
-            st.markdown("""                            
-                Obejść system anty-captcha poprzez:
-                - Pobranie aktualnego pytania ze strony (zmienia się co 7 sekund)
-                - Wysłanie pytania do LLM w celu uzyskania odpowiedzi
-                - Wysłanie formularza z danymi logowania i odpowiedzią           
-            """)
-        
+            st.markdown(self.get_text("week1.episode1.content.requirements"))
+
         with tab2:
-            st.markdown("""
-            ### Implementacja:
-            
-            1. **Przygotowanie zapytania**
-                - Tworzymy sesję HTTP do komunikacji z serwerem
-                - Pobieramy stronę logowania i wyciągamy pytanie captcha
-                
-            2. **Obsługa captcha**
-                - Wysyłamy pytanie do modelu LLM
-                - Otrzymujemy odpowiedź i formatujemy ją zgodnie z wymaganiami
-                
-            3. **Logowanie**
-                - Wysyłamy formularz z danymi logowania i odpowiedzią captcha
-                - Weryfikujemy odpowiedź serwera
-                
-            4. **Pobranie firmware**
-                - Po udanym logowaniu pobieramy firmware
-                - Zapisujemy odpowiedź do pliku
-            """)
-        
+            st.markdown(self.get_text("week1.episode1.content.solution"))
+
         with tab3:
-            st.markdown("""
-            ### Zadanie
+            st.markdown(self.get_text("week1.episode1.task.content"))
 
-            Zaloguj się do systemu robotów pod adresem xyz.ag3nts.org. Zdobyliśmy login i hasło do systemu (tester / 574e112a). 
-            Problemem jednak jest ich system 'anty-captcha', który musisz spróbować obejść. Musisz jedynie zautomatyzować proces 
-            odpowiadania na pytnie zawarte w formularzu. Przy okazji zaloguj się proszę w naszej centrali (centrala.ag3nts.org). 
-            Tam też możesz zgłosić wszystkie znalezione do tej pory flagi. Nie analizuj jeszcze pamięci robota, którą przechwycisz. 
-            Zostawmy sobie to na jutro.
+        # Sekcja implementacji
+        st.markdown(f"### {self.get_text('week1.episode1.implementation.title')}")
+        st.markdown(self.get_text("week1.episode1.implementation.description"))
 
-            ### Co musisz zrobić w zadaniu?
+        # Kontener dla kontrolek
+        st.markdown('<div class="implementation-controls">', unsafe_allow_html=True)
 
-            1. Zbadaj formularz logowania do podanej wyżej strony (XYZ) i zauważ, że wysyłane są tam trzy zmienne metodą POST: 
-               username, password oraz answer. Zawartość dwóch pierwszych już znasz. Trzecia wymaga uzupełnienia
+        # Checkbox do kontroli użycia cache'a
+        use_cache = st.checkbox(
+            self.get_text("week1.episode1.implementation.use_cache"), 
+            value=True,
+            help=self.get_text("week1.episode1.implementation.cache_help"),
+            key="use_cache_checkbox"
+        )
 
-            2. Napisz prostą aplikację, która pobiera aktualne pytanie wyświetlane na stronie (zmienia się ono co 7 sekund)
+        # Radio buttons w poziomie
+        selected_model = st.radio(
+            self.get_text("week1.episode1.implementation.select_model"),
+            LLMFactory.get_available_models(),
+            key="llm_model_selector",
+            horizontal=True
+        )
 
-            3. Wyślij to pytanie do wybranego LLM-a i pobierz odpowiedź
+        # Przycisk uruchomienia
+        if st.button(
+            self.get_text("week1.episode1.implementation.run_button"), 
+            key="episode1_task",
+            type="primary"
+        ):
+            self._run_task(selected_model, use_cache)
 
-            4. Wyślij trzy zmienne z pkt #1 do strony XYZ, uzupełniając pole answer odpowiedzią z LLM-a
-
-            5. Odczytaj odpowiedź serwera. Będzie tam podany adres URL do tajnej podstrony. Przejdź tam.
-            """)
-
-        # Dodajemy separator
-        st.markdown("<hr class='separator'>", unsafe_allow_html=True)
-        
-        # Używamy kolumn do kontroli szerokości
-        col1, col2 = st.columns([2, 3])  # Proporcja 2:3 da nam około 40% szerokości
-        
-        with col1:
-            st.markdown("### Implementacja rozwiązania:")
-            st.markdown("""
-            Rozwiązanie automatycznie wykonuje wszystkie kroki wymagane do zalogowania się do systemu robotów 
-            i pobrania firmware'u. Program obsługuje system anty-captcha poprzez wykorzystanie modelu LLM 
-            do generowania odpowiedzi na pytania.
-            """)
-
-            # Kontener dla kontrolek
-            st.markdown('<div class="implementation-controls">', unsafe_allow_html=True)
-
-            # Checkbox do kontroli użycia cache'a
-            use_cache = st.checkbox(
-                self.get_text("week1.episode1.implementation.use_cache"), 
-                value=True,
-                help=self.get_text("week1.episode1.implementation.cache_help"),
-                key="use_cache_checkbox"
-            )
-
-            # Radio buttons w poziomie
-            selected_model = st.radio(
-                "Wybierz model LLM:",  # Label w tej samej linii
-                LLMFactory.get_available_models(),
-                key="llm_model_selector",
-                horizontal=True  # Układamy w poziomie
-            )
-
-            # Przycisk uruchomienia
-            if st.button(self.get_text("week1.episode1.implementation.run_button"), 
-                        key="episode1_task",
-                        type="primary"):
-                self._run_task(selected_model, use_cache)
-
-            st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
     def _run_task(self, model_name: str, use_cache: bool):
-        with st.spinner("Running robot login automation..."):
+        with st.spinner(self.get_text("week1.episode1.status.running")):
             automation = RobotLoginAutomation(model_name)
-            # Jeśli cache wyłączony, tymczasowo wyczyść pamięć
             if not use_cache:
                 automation.qa_memory.clear_memory()
             success = automation.login(callback=self.console.log)
@@ -393,6 +340,6 @@ class RobotLoginView(BaseView):
                     }
                     </style>
                 """, unsafe_allow_html=True)
-                st.success("Task completed successfully!")
+                st.success(self.get_text("week1.episode1.status.success"))
             else:
-                st.error("Task failed!") 
+                st.error(self.get_text("week1.episode1.status.error")) 

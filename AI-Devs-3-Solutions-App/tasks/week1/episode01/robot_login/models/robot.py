@@ -17,15 +17,15 @@ class RobotLoginAutomation:
         # Pobierz stronę i pytanie
         page_content = self.web.get_page()
         if not page_content:
-            if callback: callback("Nie udało się pobrać strony")
+            if callback: callback(self.get_text("week1.episode1.logs.page_error"))
             return False
             
         question = self.parser.extract_question(page_content)
         if not question:
-            if callback: callback("Nie udało się pobrać pytania")
+            if callback: callback(self.get_text("week1.episode1.logs.question_error"))
             return False
             
-        if callback: callback(f"Pobrane pytanie: {question}")
+        if callback: callback(self.get_text("week1.episode1.logs.question_received").format(question=question))
         
         # Sprawdź czy mamy już odpowiedź w pamięci
         answer = self.qa_memory.get_answer(question)
