@@ -5,6 +5,7 @@ from ..config import Config
 from ..services.file_service import FileService
 
 class WebService:
+
     def __init__(self):
         self.session = requests.Session()
         self.base_url = f"https://{Config.ROBOT_URL}"
@@ -13,18 +14,18 @@ class WebService:
         try:
             response = self.session.get(f"{self.base_url}{path}")
             if response.status_code == 200:
-                # Jeśli to plik firmware (.txt), zapisz go
+                # If it's a firmware file (.txt), save it
                 if path.endswith('.txt'):
                     self._save_firmware(path, response.text, callback)
                 return response.text
             return None
         except Exception as e:
-            print(f"Błąd HTTP GET: {e}")
+            print(f"HTTP GET error: {e}")
             return None
 
     def _save_firmware(self, path: str, content: str, callback=None):
         """
-        Zapisuje plik firmware i szuka flag
+        Saves firmware file and searches for flags
         """
         try:
             filename = path.split('/')[-1]
@@ -33,17 +34,17 @@ class WebService:
             with open(filepath, "w", encoding="utf-8") as f:
                 f.write(content)
             if callback:
-                callback(f"Pobrano plik firmware: {filename}")
+                callback(f"Downloaded firmware file: {filename}")
             
-            # Szukaj flag w zawartości
+            # Search for flags in content
             flags = FileService.find_flags(content)
             if flags and callback:
                 for flag in flags:
                     FileService.save_flag(flag, filename)
-                    callback(f"Znaleziono nową flagę!", "flag")
+                    callback(f"Found new flag!", "flag")
                     
         except Exception as e:
-            print(f"Błąd podczas zapisywania firmware: {e}")
+            print(f"Error while saving firmware: {e}")
 
     def post_login(self, data: Dict) -> Optional[str]:
         try:
@@ -60,5 +61,5 @@ class WebService:
             )
             return response.text if response.status_code == 200 else None
         except Exception as e:
-            print(f"Błąd HTTP POST: {e}")
+            print(f"HTTP POST error: {e}")
             return None 

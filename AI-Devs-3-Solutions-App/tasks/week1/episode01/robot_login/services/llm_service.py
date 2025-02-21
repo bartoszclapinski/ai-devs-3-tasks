@@ -12,8 +12,8 @@ class LLMService:
                 model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": """
-                    Jesteś asystentem, który odpowiada na pytania krótko i zwięźle.
-                    Odpowiadaj tylko liczbą, bez dodatkowego tekstu czy jednostek.
+                    You are an assistant that answers questions briefly and concisely.
+                    Respond only with a number, without any additional text or units.
                     """},
                     {"role": "user", "content": question}
                 ]
@@ -21,5 +21,5 @@ class LLMService:
             answer = response.choices[0].message.content.strip()
             return answer if answer.isdigit() else None
         except Exception as e:
-            print(f"Błąd LLM: {e}")
+            print(f"LLM Error: {e}")
             return None 
