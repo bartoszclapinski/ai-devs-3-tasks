@@ -5,72 +5,80 @@ The project includes a user interface and solution implementation using LLM mode
 
 ## 🚀 Features
 
-- LLM models for solving questions
+- LLM models integration (OpenAI GPT-4)
+- Multi-language support (PL/ENG)
 - Answer caching system
-- Automatic flag saving
+- Automatic flag detection and saving
 - Firmware file downloading and saving
 - User-friendly Streamlit interface
+- Dark mode support
 
 ## 📋 Requirements
 
 - Python 3.8+
 - OpenAI API key
+- Streamlit
+- BeautifulSoup4
+- Requests
 
 ## 💻 Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/ai-devs-3-tasks.git
-cd ai-devs-3-tasks
+git clone https://github.com/username/AI-Devs-3-Solutions-App.git
+cd AI-Devs-3-Solutions-App
 ```
-2. Install required packages:
+
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-3. Set OpenAI API key:
-```bash
-OPENAI_API_KEY="your-api-key"
+
+3. Create `.env` file with your OpenAI API key:
+```
+OPENAI_API_KEY=your_key_here
 ```
 
-## 🎮 Running
-
-Start the Streamlit app:
+4. Run the application:
 ```bash
 streamlit run ui/app.py
 ```
 
-The application will be available at: `http://localhost:8000`
+## 🏗️ Project Structure
 
-## 📁 Project Structure
-
-```bash
-AI-Devs-3/
-├── ui/                         # Streamlit user interface  
-│   ├── app.py                  # Main application  
-│   ├── components/             # Components (flags, files)  
-│   └── views/                  # Task views  
-├── tasks/                      # Solution logic  
-│   └── week1/  
-│       └── episode01/  
-│           └── robot_login/  
-│               ├── models/     # Main logic  
-│               ├── services/   # Services (web, llm, files)  
-│               └── parsers/    # HTML parsers  
-├── services/                   # Shared services  
-│   └── llm/                    # LLM models handling  
-└── files_storage/              # Storage for downloaded files  
-    ├── flags.md                # Found flags  
-    ├── home_page/              # UI assets  
-    └── week1/                  # Week 1 files  
-        └── episode01/          # Episode 1 files  
+```
+AI-Devs-3-Solutions-App/
+├── ui/                      # User interface
+│   ├── app.py              # Main application file
+│   ├── styles/             # CSS styles
+│   ├── components/         # Reusable UI components
+│   ├── views/              # View components
+│   └── services/           # UI-related services
+├── tasks/                  # Task implementations
+│   └── week1/             
+│       └── episode01/      # Robot Login task
+├── services/              
+│   └── llm/               # LLM service implementations
+├── translations/           # Language files
+│   ├── common/            # Shared translations
+│   └── week1/             # Task-specific translations
+└── files_storage/         # Downloaded files storage
 ```
 
-## ⚙️ Configuration
+## 🔧 Configuration
 
-Configuration available in files:
+Available in:
 - `.env` - OpenAI API key
 - `.streamlit/config.toml` - Streamlit configuration
 - `tasks/week1/episode01/robot_login/config.py` - Task configuration
+
+## 🌍 Translations
+
+The application supports two languages:
+- Polish (default)
+- English
+
+Language files are stored in the `translations/` directory.
 
 ## 📝 License
 
