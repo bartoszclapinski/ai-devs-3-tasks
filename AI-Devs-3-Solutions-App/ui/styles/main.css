@@ -33,4 +33,152 @@
 .status.not-started {
     background: #f3f4f6;
     color: #374151;
+}
+
+/* Główne style aplikacji */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+.stApp > header {display: none;}
+div[data-testid="stToolbar"] {visibility: hidden;}
+
+/* Style dla powiadomień */
+div[data-testid="stNotification"] {
+    width: 100% !important;
+    margin-left: 0 !important;
+}
+
+/* Zmniejsz padding dla wszystkich elementów */
+.block-container {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+/* Wspólne styles dla wszystkich przycisków */
+.stButton > button {
+    background-color: #2e7d32 !important;
+    border-color: #2e7d32 !important;
+    color: white !important;
+}
+
+.stButton > button:hover {
+    background-color: #1b5e20 !important;
+    border-color: #1b5e20 !important;
+    color: white !important;
+}
+
+/* Style dla checkboxów */
+div[data-testid="stCheckbox"] label div[role="checkbox"] {
+    background-color: #2e7d32 !important;
+    border-color: #2e7d32 !important;
+}
+
+div[data-testid="stCheckbox"] label div[role="checkbox"][aria-checked="true"] {
+    background-color: #2e7d32 !important;
+    border-color: #2e7d32 !important;
+}
+
+div[data-testid="stCheckbox"] label div[role="checkbox"]:hover {
+    border-color: #2e7d32 !important;
+    background-color: #2e7d32 !important;
+}
+
+/* Style dla selectboxów */
+div[data-testid="stSelectbox"] div[role="button"] {
+    border-color: #2e7d32 !important;
+}
+
+div[data-testid="stSelectbox"] div[role="button"]:hover {
+    border-color: #2e7d32 !important;
+    background-color: rgba(46, 125, 50, 0.1) !important;
+}
+
+/* Osobne style dla przełącznika języka */
+.language-switch {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.language-switch .stButton > button {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    width: 35px !important;
+    height: 25px !important;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.language-switch .stButton > button:hover {
+    opacity: 1 !important;
+    background: transparent !important;
+}
+
+.language-switch .stButton > button:disabled {
+    opacity: 1 !important;
+    background: transparent !important;
+}
+
+.language-switch .stButton > button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Style dla logo */
+[data-testid="stSidebar"] div[data-testid="stMarkdown"] {
+    text-align: center;            
+}
+
+[data-testid="stSidebar"] div[data-testid="stMarkdown"] svg {
+    max-width: 120% !important;
+    height: auto;
+    cursor: pointer;
+    margin-left: -10%;
+    margin-right: -10%;
+    transform: scale(1.2);
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+.logo-link {
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+}
+
+.logo-link:hover svg {
+    opacity: 0.9;
+}
+
+/* Style dla elementów w sidebarze */
+section[data-testid="stSidebar"] hr {
+    margin: 10px 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-top: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+/* Wszystkie przyciski w sidebarze */
+section[data-testid="stSidebar"] .stButton > button {
+    width: 100%;
+    text-align: left;
+    padding: 0.3rem 0.5rem !important;
+    min-height: 40px !important;
+    height: auto !important;
+    line-height: 1.2 !important;
+    margin: 2px 0 !important;
+}
+
+/* Przyciski flag i plików */
+section[data-testid="stSidebar"] > div > div > div > .stButton {
+    margin: 5px 0 !important;
+}
+
+/* Przyciski na dole */
+.bottom-buttons {
+    padding: 0;
+    margin-top: -5px;
 } 
