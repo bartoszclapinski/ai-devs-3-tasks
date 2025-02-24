@@ -1,5 +1,6 @@
 from ..base_view import BaseView
 from .episodes.episode1.robot_login_view import RobotLoginView
+from .episodes.episode2.robot_verify_view import RobotVerifyView
 import streamlit as st
 
 class Week1View(BaseView):
@@ -11,6 +12,8 @@ class Week1View(BaseView):
         if selected_episode == episode1_title:
             RobotLoginView().show()
         elif selected_episode == episode2_title:
+            RobotVerifyView().show()
+        else:
             self.render_header(episode2_title)
             st.write(self.get_text("week1.episode2.coming_soon"))
 

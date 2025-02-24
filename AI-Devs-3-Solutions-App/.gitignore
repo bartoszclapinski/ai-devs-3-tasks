@@ -8,7 +8,7 @@ files_storage/week*/
 files_storage/*/episode*/
 
 # Lecture materials
-**/content/*-Lecture.md
+**/content/*-Lecture*.md
 **/content/Website-Files/
 **/content/Website-Files/*
 

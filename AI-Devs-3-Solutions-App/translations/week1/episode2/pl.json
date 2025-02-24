@@ -1,0 +1,18 @@
+{
+    "title": "Epizod 2 - Robot Verify",
+    "subtitle": "Cel zadania:",
+    "description": "Przygotować algorytm do przechodzenia weryfikacji tożsamości robota.",
+    "tabs": {
+        "requirements": "📋 Wymagania",
+        "solution": "💡 Rozwiązanie",
+        "task": "📝 Treść zadania"
+    },
+    "content": {
+        "requirements": "Stworzyć system weryfikacji poprzez:\n- Analizę zrzutu pamięci robota\n- Obsługę procesu weryfikacji\n- Odpowiadanie na pytania zgodnie z kontekstem",
+        "solution": "### Implementacja:\n\nRozwiązanie w trakcie przygotowania..."
+    },
+    "task": {
+        "title": "Cel zadania:",
+        "content": "**Cel zadania:**\n\nOstatnio zdobyłeś zrzut pamięci robota patrolującego teren. Użyj wiedzy pozyskanej z tego zrzutu do przygotowania dla nas algorytmu do przechodzenia weryfikacji tożsamości. To niezbędne, aby ludzie mogli podawać się za roboty.\n\n**Wymagania:**\n\n1. Zapoznać się z plikiem TXT zdobytym wczoraj\n2. Przeanalizować proces weryfikacji człowieka/robota\n3. Wysłać polecenie READY do robota (endpoint /verify)\n4. Odpowiadać na pytania zgodnie z kontekstem ze zrzutu pamięci\n5. Obsłużyć przypadki nieprawdziwych informacji (np. stolica Polski to 'KRAKÓW')\n\n**Uwagi:**\n- Pytania zmieniają się dynamicznie\n- Wymagane jest zapamiętanie identyfikatora wiadomości\n- Po poprawnej weryfikacji otrzymasz FLAGĘ"
+    }
+} 
