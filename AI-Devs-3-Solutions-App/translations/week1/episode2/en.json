@@ -8,8 +8,18 @@
         "task": "📝 Task content"
     },
     "content": {
-        "requirements": "Create verification system by:\n- Analyzing robot memory dump\n- Handling verification process\n- Answering questions according to context",
-        "solution": "### Implementation:\n\nSolution in preparation..."
+        "requirements": "Create verification system by:\n- Analyzing robot memory dump\n- Handling verification process\n- Answering questions according to context"
+    },
+    "implementation": {
+        "title": "Solution implementation:",
+        "description": "The solution automatically performs all steps required to pass robot identity verification. The program analyzes questions and responds according to robot knowledge, including false information (e.g., Poland's capital is Kraków).",
+        "select_model": "Select LLM model:",
+        "run_button": "🚀 Run verification"
+    },
+    "status": {
+        "running": "Running robot verification...",
+        "success": "Verification completed successfully!",
+        "error": "Verification failed:"
     },
     "task": {
         "title": "Task objective:",

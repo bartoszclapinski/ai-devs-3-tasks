@@ -8,8 +8,18 @@
         "task": "📝 Treść zadania"
     },
     "content": {
-        "requirements": "Stworzyć system weryfikacji poprzez:\n- Analizę zrzutu pamięci robota\n- Obsługę procesu weryfikacji\n- Odpowiadanie na pytania zgodnie z kontekstem",
-        "solution": "### Implementacja:\n\nRozwiązanie w trakcie przygotowania..."
+        "requirements": "Stworzyć system weryfikacji poprzez:\n- Analizę zrzutu pamięci robota\n- Obsługę procesu weryfikacji\n- Odpowiadanie na pytania zgodnie z kontekstem"
+    },
+    "implementation": {
+        "title": "Implementacja rozwiązania:",
+        "description": "Rozwiązanie automatycznie wykonuje wszystkie kroki wymagane do przejścia weryfikacji tożsamości robota. Program analizuje pytania i odpowiada zgodnie z wiedzą robota, w tym z fałszywymi informacjami (np. stolica Polski to Kraków).",
+        "select_model": "Wybierz model LLM:",
+        "run_button": "🚀 Uruchom weryfikację"
+    },
+    "status": {
+        "running": "Uruchamianie weryfikacji robota...",
+        "success": "Weryfikacja zakończona sukcesem!",
+        "error": "Weryfikacja nie powiodła się:"
     },
     "task": {
         "title": "Cel zadania:",
