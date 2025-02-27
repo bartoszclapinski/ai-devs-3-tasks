@@ -8,7 +8,8 @@
         "task": "📝 Treść zadania"
     },
     "content": {
-        "requirements": "Stworzyć system weryfikacji poprzez:\n- Analizę zrzutu pamięci robota\n- Obsługę procesu weryfikacji\n- Odpowiadanie na pytania zgodnie z kontekstem"
+        "requirements": "Stworzyć system weryfikacji poprzez:\n- Analizę zrzutu pamięci robota\n- Obsługę procesu weryfikacji\n- Odpowiadanie na pytania zgodnie z kontekstem",
+        "solution": "### Implementacja:\n\n1. **Przygotowanie komunikacji**\n    - Tworzymy sesję HTTP do komunikacji z API weryfikacyjnym\n    - Wysyłamy polecenie READY, aby rozpocząć weryfikację\n\n2. **Obsługa pytań**\n    - Analizujemy otrzymane pytanie\n    - Sprawdzamy, czy dotyczy ono specjalnych przypadków (fałszywe informacje)\n    - Jeśli tak, zwracamy fałszywą odpowiedź (np. stolica Polski to Kraków)\n    - Jeśli nie, używamy modelu LLM do wygenerowania odpowiedzi\n\n3. **Weryfikacja**\n    - Wysyłamy odpowiedź z zachowaniem identyfikatora wiadomości\n    - Sprawdzamy, czy weryfikacja zakończyła się sukcesem\n    - Jeśli tak, zapisujemy flagę\n\n4. **Obsługa błędów**\n    - W przypadku niepowodzenia, próbujemy ponownie rozpocząć weryfikację\n    - Logujemy wszystkie kroki procesu"
     },
     "implementation": {
         "title": "Implementacja rozwiązania:",

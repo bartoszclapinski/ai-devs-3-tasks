@@ -181,4 +181,36 @@ section[data-testid="stSidebar"] > div > div > div > .stButton {
 .bottom-buttons {
     padding: 0;
     margin-top: -5px;
+}
+
+/* Style dla zakładek */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 2px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    height: 50px;
+    white-space: pre-wrap;
+    background-color: #f0f2f6;
+    border-radius: 4px 4px 0 0;
+    gap: 1px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: #2e7d32 !important;
+    color: white !important;
+}
+
+/* Podkreślenie aktywnej zakładki */
+.stTabs [aria-selected="true"]::before {
+    background-color: #2e7d32;
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 5px;
+    border-radius: 0 0 4px 4px;
 } 

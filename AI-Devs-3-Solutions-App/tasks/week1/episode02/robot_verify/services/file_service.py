@@ -2,6 +2,7 @@ import re
 from pathlib import Path
 from typing import Optional, Callable
 from ..config import Config
+from datetime import datetime
 
 class FileService:
     @staticmethod
@@ -13,6 +14,9 @@ class FileService:
                 if callback:
                     callback(f"Invalid flag format: {flag}")
                 return False
+                
+            # Get current date and time
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 
             # Create flags file if it doesn't exist
             if not Config.FLAGS_FILE.exists():
@@ -38,7 +42,7 @@ class FileService:
                     f.write("## Week 1\n\n")
                 if "### Episode 2 - Robot Verify" not in content:
                     f.write("### Episode 2 - Robot Verify\n\n")
-                f.write(f"- {flag} (Robot Verify)\n")
+                f.write(f"- {flag} (Robot Verify, data: {current_time})\n")
                 
             if callback:
                 callback(f"Flag saved: {flag}")

@@ -8,7 +8,8 @@
         "task": "📝 Task content"
     },
     "content": {
-        "requirements": "Create verification system by:\n- Analyzing robot memory dump\n- Handling verification process\n- Answering questions according to context"
+        "requirements": "Create verification system by:\n- Analyzing robot memory dump\n- Handling verification process\n- Answering questions according to context",
+        "solution": "### Implementation:\n\n1. **Communication preparation**\n    - Create HTTP session for verification API communication\n    - Send READY command to start verification\n\n2. **Question handling**\n    - Analyze received question\n    - Check if it relates to special cases (false information)\n    - If yes, return false answer (e.g., Poland's capital is Kraków)\n    - If not, use LLM model to generate answer\n\n3. **Verification**\n    - Send answer with the same message ID\n    - Check if verification was successful\n    - If yes, save the flag\n\n4. **Error handling**\n    - In case of failure, try to restart verification\n    - Log all process steps"
     },
     "implementation": {
         "title": "Solution implementation:",
