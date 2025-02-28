@@ -26,7 +26,8 @@ class Solution(BaseView):
                 # Pokaż wynik
                 if result.success:
                     st.success(self.get_text('week1.episode2.status.success'))
-                    if result.flag:
+                    if hasattr(result, 'flag') and result.flag:
                         st.balloons()
                 else:
-                    st.error(f"{self.get_text('week1.episode2.status.error')} {result.error}") 
+                    error_msg = getattr(result, 'error', '')
+                    st.error(f"{self.get_text('week1.episode2.status.error')} {error_msg}") 

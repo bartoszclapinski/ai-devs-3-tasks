@@ -5,8 +5,7 @@ class Config:
     API_URL = "https://xyz.ag3nts.org/verify"
     
     # File paths
-    ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent  # Dodatkowy .parent aby wyjść poza katalog tasks
-    FILES_DIR = ROOT_DIR / "files_storage" / "week1" / "episode02"
+    ROOT_DIR = Path(__file__).parent.parent.parent.parent.parent
     FLAGS_FILE = ROOT_DIR / "files_storage" / "flags.md"
     
     # Ensure directories exist
