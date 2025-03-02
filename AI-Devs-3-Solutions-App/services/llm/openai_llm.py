@@ -8,20 +8,23 @@ class OpenAILLM(BaseLLM):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.model_name = model_name
 
-    def get_answer(self, question: str) -> Optional[str]:
+    def get_answer(self, question: str, system_prompt: Optional[str] = None) -> Optional[str]:
         try:
+            messages = []
+            
+            # Add system message if provided
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+                
+            # Add user message
+            messages.append({"role": "user", "content": question})
+            
             response = self.client.chat.completions.create(
                 model=self.model_name,
-                messages=[
-                    {"role": "system", "content": """
-                    Jesteś asystentem, który odpowiada na pytania krótko i zwięźle.
-                    Odpowiadaj tylko liczbą, bez dodatkowego tekstu czy jednostek.
-                    """},
-                    {"role": "user", "content": question}
-                ]
+                messages=messages
             )
-            answer = response.choices[0].message.content.strip()
-            return answer if answer.isdigit() else None
+            
+            return response.choices[0].message.content.strip()
         except Exception as e:
-            print(f"Błąd LLM: {e}")
+            print(f"LLM Error: {e}")
             return None 

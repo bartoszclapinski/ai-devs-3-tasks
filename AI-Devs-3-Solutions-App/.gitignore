@@ -32,4 +32,7 @@ Thumbs.db
 
 # QA memory files
 qa_memory.json
-**/qa_memory.json 
+**/qa_memory.json
+
+# Documentation folder (private)
+/docs-private/ 

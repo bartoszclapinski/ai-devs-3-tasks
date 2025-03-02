@@ -2,17 +2,18 @@ import re
 import requests
 from typing import Optional, Callable
 import os
-from openai import OpenAI
 from pathlib import Path
 from datetime import datetime
 from types import SimpleNamespace
+from services.llm.llm_factory import LLMFactory
 
 class RobotVerifyAutomation:
     def __init__(self, model_name="gpt-4o-mini"):
         self.api_url = "https://xyz.ag3nts.org/verify"
         self.model_name = model_name
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.llm = LLMFactory.create(model_name)
         self.logs = []
+        self.system_prompt = None  # We'll use the context directly as system prompt
         
     def run(self, callback: Optional[Callable] = None):
         try:
@@ -70,9 +71,19 @@ class RobotVerifyAutomation:
     def _read_context(self):
         # Kontekst z instrukcjami i specjalnymi faktami
         return """
+        <identity>
+        You are a robot assistant that answers verification questions accurately and concisely.
+            - Provide only the answer without explanations or additional text
+            - For math problems, calculate the result
+            - For general knowledge questions, provide factual answers
+            - Keep answers very short, ideally just a word or number
+            - Do not include units unless specifically asked
+        </identity>
+
         <instructions>
         You are taking part in a task. You will be given a question which you need to answer.
-        Answer need to be simple and never in french, you can use English and Polish.
+        IMPORTANT: All answers must be in English only, never in any other language.
+        If someone asks a question in another language, still answer in English.
         If answer can be a number, it need to be a number only.
         Your are answering as a robot in this task. 
         There will be three special questions where you need to use special false facts.
@@ -110,16 +121,9 @@ class RobotVerifyAutomation:
     
     def _get_llm_answer(self, question, context, callback=None):
         try:
-            response = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=[
-                    {"role": "system", "content": context},
-                    {"role": "user", "content": question}
-                ],
-                temperature=0.1
-            )
+            # Use our centralized LLM service with the context as system prompt
+            answer = self.llm.get_answer(question, system_prompt=context)
             
-            answer = response.choices[0].message.content.strip()
             self._log(f"LLM answer: {answer}", callback)
             return answer
             
