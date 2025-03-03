@@ -6,6 +6,7 @@ from pathlib import Path
 from datetime import datetime
 from types import SimpleNamespace
 from services.llm.llm_factory import LLMFactory
+from services.file import FlagService
 
 class RobotVerifyAutomation:
     def __init__(self, model_name="gpt-4o-mini"):
@@ -14,6 +15,7 @@ class RobotVerifyAutomation:
         self.llm = LLMFactory.create(model_name)
         self.logs = []
         self.system_prompt = None  # We'll use the context directly as system prompt
+        self.flag_service = FlagService()
         
     def run(self, callback: Optional[Callable] = None):
         try:
@@ -132,43 +134,30 @@ class RobotVerifyAutomation:
             return "ERROR"
     
     def _save_flag(self, flag, callback=None):
-        try:
-            # Validate flag format
-            if not re.match(r'^\{\{FLG:.+\}\}$', flag):
-                self._log(f"Invalid flag format: {flag}", callback)
-                return False
-                
-            # Get current date and time
-            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        """
+        Save the flag to the flags.md file.
+        
+        Args:
+            flag: Flag to save
+            callback: Optional callback function for logging
             
-            # Define flags file path
-            root_dir = Path(__file__).parent.parent.parent.parent.parent
-            flags_file = root_dir / "files_storage" / "flags.md"
-                
-            # Create flags file if it doesn't exist
-            if not flags_file.exists():
-                flags_file.parent.mkdir(parents=True, exist_ok=True)
-                with open(flags_file, 'w', encoding='utf-8') as f:
-                    f.write("# Znalezione flagi\n\n")
-                    f.write("## Week 1\n\n")
-                    f.write("### Episode 2 - Robot Verify\n\n")
-                    
-            # Check if flag already exists
-            content = ""
-            if flags_file.exists():
-                with open(flags_file, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                    if flag in content:
-                        self._log("Flag already saved", callback)
-                        return True
-                        
-            # Append flag to file
-            with open(flags_file, 'a', encoding='utf-8') as f:
-                if "## Week 1" not in content:
-                    f.write("## Week 1\n\n")
-                if "### Episode 2 - Robot Verify" not in content:
-                    f.write("### Episode 2 - Robot Verify\n\n")
-                f.write(f"- {flag} (Robot Verify, data: {current_time})\n")
+        Returns:
+            bool: True if flag was saved successfully, False otherwise
+        """
+        try:
+            self._log(f"Saving flag: {flag}", callback)
+            
+            # Use centralized FlagService to save the flag
+            result = self.flag_service.save_flag(
+                week=1,
+                episode=2,
+                flag=flag.replace("{{FLG:", "").replace("}}", ""),
+                source="Robot Verify"
+            )
+            
+            if not result.success:
+                self._log(f"Error saving flag: {getattr(result, 'error', 'Unknown error')}", callback)
+                return False
                 
             self._log(f"Flag saved: {flag}", callback)
             return True
