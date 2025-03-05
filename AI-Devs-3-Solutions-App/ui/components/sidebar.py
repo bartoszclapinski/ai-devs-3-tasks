@@ -45,7 +45,8 @@ class Sidebar:
         episodes = [
             TranslationService.get_text("common.choose_episode"),
             TranslationService.get_text("week1.episode1.title"),
-            TranslationService.get_text("week1.episode2.title")
+            TranslationService.get_text("week1.episode2.title"),
+            TranslationService.get_text("week1.episode3.title")
         ]
         return st.sidebar.selectbox(
             TranslationService.get_text("common.select_episode"),
