@@ -65,7 +65,11 @@
             }
         },
         "episode2": {
-            "title": "Epizod 2 - Wkrótce",
+            "title": "Epizod 2 - Robot Verify",
+            "coming_soon": "Wkrótce dostępne..."
+        },
+        "episode3": {
+            "title": "Epizod 3 - Robot Knowledge",
             "coming_soon": "Wkrótce dostępne..."
         }
     }

@@ -14,7 +14,7 @@ class TaskInfo(BaseView):
         st.markdown(self.get_text_func('week1.episode3.task_info.description'))
         
         # Check if the task file has been downloaded
-        task_file_path = "AI-Devs-3-Solutions-App/files_storage/week1/episode03/json_data.txt"
+        task_file_path = "files_storage/week1/episode03/json_data.txt"
         if os.path.exists(task_file_path):
             st.success(self.get_text_func('week1.episode3.task_info.file_downloaded'))
             

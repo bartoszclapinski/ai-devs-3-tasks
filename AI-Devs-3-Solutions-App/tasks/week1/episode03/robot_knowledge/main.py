@@ -26,13 +26,8 @@ class RobotKnowledgeAutomation:
         Args:
             model_name: Name of the LLM model to use
         """
-        self.model_name = model_name
-        # Load environment variables
-        load_dotenv()
-        # Get API key
-        self.api_key = os.getenv("AI_DEVS_3_KEY")
-        if not self.api_key:
-            logger.error("No AI_DEVS_3_KEY found. Set the AI_DEVS_3_KEY environment variable or add it to the .env file")
+        self.model_name = model_name        
+        
         
     def run(self, callback: Optional[Callable] = None) -> SimpleNamespace:
         """
@@ -49,24 +44,14 @@ class RobotKnowledgeAutomation:
         """
         try:
             # Log start
-            self._log("Starting Robot Knowledge task automation", callback)
+            self._log("Starting Robot Knowledge task automation", callback)  
             
-            # Check if API key is available
-            if not self.api_key:
-                return SimpleNamespace(
-                    success=False, 
-                    error="No AI_DEVS_3_KEY found. Set the AI_DEVS_3_KEY environment variable or add it to the .env file"
-                )
-            
+                        
             # Download the JSON file
-            self._log(f"Downloading JSON file using API key: {self.api_key[:4]}...", callback)
-            output_path = "files_storage/week1/episode03/json_data.txt"
-            
-            # Create directory if it doesn't exist
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            self._log(f"Downloading JSON file...", callback)           
             
             # Use the download_task_file function from download_task.py
-            success = download_task_file(self.api_key, output_path)
+            success = download_task_file()
             
             if not success:
                 self._log("Failed to download the JSON file", callback, log_type="error")
@@ -78,18 +63,7 @@ class RobotKnowledgeAutomation:
             # Log success
             self._log("JSON file downloaded successfully", callback)
             
-            # Check file size
-            file_size = os.path.getsize(output_path)
-            file_size_kb = file_size / 1024
-            file_size_mb = file_size_kb / 1024
-            
-            if file_size_mb >= 1:
-                self._log(f"File size: {file_size_mb:.2f} MB", callback)
-            else:
-                self._log(f"File size: {file_size_kb:.2f} KB", callback)
-            
-            # For now, we're just downloading the file
-            # In the future, we'll add processing logic here
+           
             
             # Return success
             return SimpleNamespace(

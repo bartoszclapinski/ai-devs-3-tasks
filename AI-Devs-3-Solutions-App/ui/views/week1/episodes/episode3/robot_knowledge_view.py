@@ -54,4 +54,43 @@ class RobotKnowledgeView(BaseView):
         self.console.container = st.empty()
         
         # Close container
-        st.markdown('</div>', unsafe_allow_html=True) 
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+    def get_text(self, key):
+        """
+        Get translated text for Episode 3.
+        This method overrides the BaseView.get_text method to handle the new translation structure.
+        """
+        from ui.services.translation_service import TranslationService
+        
+        # If the key starts with 'week1.episode3.', remove the prefix
+        if key.startswith('week1.episode3.'):
+            # Extract the part after 'week1.episode3.'
+            short_key = key[len('week1.episode3.'):]
+            
+            # Try to get the translation using the short key from the episode3 translations
+            try:
+                # Get the current language
+                lang = st.session_state.get('language', 'pl')
+                
+                # Load the episode3 translations directly
+                translations_root = Path(__file__).parent.parent.parent.parent.parent.parent / "translations" / "week1" / "episode3"
+                lang_file = translations_root / f"{lang}.json"
+                
+                if lang_file.exists():
+                    import json
+                    with open(lang_file, 'r', encoding='utf-8') as file:
+                        episode_translations = json.load(file)
+                    
+                    # Navigate through the keys
+                    keys = short_key.split('.')
+                    value = episode_translations
+                    for k in keys:
+                        value = value[k]
+                    return value
+            except Exception:
+                # If any error occurs, fall back to the original method
+                pass
+        
+        # Fall back to the original method
+        return TranslationService.get_text(key) 
