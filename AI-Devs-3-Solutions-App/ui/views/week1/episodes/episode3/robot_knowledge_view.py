@@ -17,6 +17,47 @@ class RobotKnowledgeView(BaseView):
         css_path = Path(__file__).parent.parent.parent.parent.parent / "styles" / "episodes_styles.css"
         with open(css_path, "r") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+        
+        # Add console styles
+        st.markdown("""
+            <style>
+            .stConsole {
+                background-color: #2b2b2b;
+                color: #f8f8f2;
+                font-family: 'Consolas', monospace;
+                padding: 10px;
+                border-radius: 5px;
+                margin: 10px 0;
+                width: 100%;
+            }
+            .console-line {
+                margin: 3px 0;
+                white-space: pre-wrap;
+                display: flex;
+                align-items: center;
+            }
+            .log-icon {
+                margin-right: 8px;
+                font-size: 14px;
+            }
+            .log-text {
+                font-family: 'Consolas', monospace;
+            }
+            .log-question { color: #61afef; }
+            .log-answer { color: #98c379; }
+            .log-success { color: #98c379; }
+            .log-error { color: #e06c75; }
+            .log-warning { color: #e5c07b; }
+            .log-info { color: #56b6c2; }
+            .log-flag {
+                color: #ff79c6;
+                font-weight: bold;
+            }
+            .flag-icon {
+                color: #4CAF50;
+            }
+            </style>
+        """, unsafe_allow_html=True)
 
     def show(self):
         # Add container for all content
@@ -49,9 +90,6 @@ class RobotKnowledgeView(BaseView):
         
         # Display solution without additional container
         self.solution.show(self.console)
-        
-        # Display console
-        self.console.container = st.empty()
         
         # Close container
         st.markdown('</div>', unsafe_allow_html=True)

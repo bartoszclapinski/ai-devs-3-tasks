@@ -1,104 +1,48 @@
 import streamlit as st
-from ui.views.base_view import BaseView
-import time
 
-class Console(BaseView):
+class Console:
     def __init__(self):
-        self.container = st.empty()
         self.logs = []
-        self.max_logs = 100
+        # Container for logs will be created on first log
+        self.container = None
+
+    def log(self, text: str, log_type: str = "default"):
+        if self.container is None:
+            self.container = st.empty()
+            
+        icon, css_class = self._get_log_style(text, log_type)
+        self.logs.append((icon, text, css_class))
+        self._update_display()
     
-    def show(self):
-        """
-        Implementation of the abstract show method from BaseView.
-        This method is required but not used directly for the Console component.
-        """
-        self._render()
-        
-    def log(self, message, log_type="info"):
-        """
-        Add a log message to the console.
-        
-        Args:
-            message: The message to log
-            log_type: The type of log (info, warning, error, success)
-        """
-        timestamp = time.strftime("%H:%M:%S")
-        self.logs.append({
-            "timestamp": timestamp,
-            "message": message,
-            "type": log_type
-        })
-        
-        # Limit the number of logs
-        if len(self.logs) > self.max_logs:
-            self.logs = self.logs[-self.max_logs:]
+    def _get_log_style(self, text: str, log_type: str):
+        if log_type == "flag":
+            return "🏆", "log-flag"
+        elif log_type == "error":
+            return "❌", "log-error"
+        elif log_type == "warning":
+            return "⚠️", "log-warning"
+        elif log_type == "success":
+            return "✅", "log-success"
+        elif log_type == "info":
+            return "ℹ️", "log-info"
+        elif log_type == "default":
+            if "question" in text.lower() or "pytanie" in text.lower():
+                return "❓", "log-question"
+            elif "answer" in text.lower() or "odpowiedź" in text.lower():
+                return "💡", "log-answer"
+            elif "success" in text.lower() or "udane" in text.lower() or "ok" in text.lower():
+                return "✅", "log-success"
+            elif "downloading" in text.lower() or "pobieranie" in text.lower() or "zapisano" in text.lower():
+                return "📥", "log-info"
+            elif "error" in text.lower() or "błąd" in text.lower() or "nie udało" in text.lower() or "failed" in text.lower():
+                return "❌", "log-error"
             
-        self._render()
-        
-    def _render(self):
-        """Render the console with all logs."""
-        html = """
-        <div class="console">
-            <div class="console-header">
-                <span>Console</span>
-            </div>
-            <div class="console-body">
-        """
-        
-        for log in self.logs:
-            log_class = f"console-{log['type']}"
-            html += f"""
-            <div class="console-line {log_class}">
-                <span class="console-timestamp">[{log['timestamp']}]</span>
-                <span class="console-message">{log['message']}</span>
-            </div>
-            """
-            
-        html += """
-            </div>
-        </div>
-        <style>
-        .console {
-            background-color: #1E1E1E;
-            border-radius: 5px;
-            margin-top: 20px;
-            font-family: 'Courier New', monospace;
-        }
-        .console-header {
-            background-color: #333;
-            padding: 5px 10px;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            color: white;
-            font-weight: bold;
-        }
-        .console-body {
-            padding: 10px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .console-line {
-            margin-bottom: 5px;
-            color: #DDD;
-        }
-        .console-timestamp {
-            color: #888;
-            margin-right: 10px;
-        }
-        .console-info {
-            color: #DDD;
-        }
-        .console-warning {
-            color: #FFA500;
-        }
-        .console-error {
-            color: #FF6347;
-        }
-        .console-success {
-            color: #4CAF50;
-        }
-        </style>
-        """
-        
-        self.container.markdown(html, unsafe_allow_html=True) 
+        return "📝", ""
+
+    def _update_display(self):
+        console_html = '<div class="stConsole">'
+        for icon, text, css_class in self.logs:
+            icon_class = "flag-icon" if "flag" in css_class.lower() else ""
+            console_html += f'<div class="console-line"><span class="log-icon {icon_class}">{icon}</span><span class="log-text {css_class}">{text}</span></div>'
+        console_html += '</div>'
+        self.container.markdown(console_html, unsafe_allow_html=True) 

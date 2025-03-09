@@ -28,16 +28,18 @@ def main():
     load_dotenv()
     
     # Create and run the automation
-    automation = RobotKnowledgeAutomation()
+    automation = RobotKnowledgeAutomation(model_name="gpt-4o")
     result = automation.run()
     
     # Show result
     if result.success:
         logger.info("Task completed successfully")
-        if hasattr(result, 'message'):
-            logger.info(result.message)
-        if hasattr(result, 'flag'):
+        if hasattr(result, 'flag') and result.flag:
             logger.info(f"Flag: {result.flag}")
+        if hasattr(result, 'errors_fixed'):
+            logger.info(f"Fixed {result.errors_fixed} calculation errors")
+        if hasattr(result, 'questions_answered'):
+            logger.info(f"Answered {result.questions_answered} test questions")
     else:
         logger.error(f"Task failed: {getattr(result, 'error', 'Unknown error')}")
 
