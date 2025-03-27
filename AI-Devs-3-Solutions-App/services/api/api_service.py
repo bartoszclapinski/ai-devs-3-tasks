@@ -1,8 +1,16 @@
 import os
 import requests
+import logging
 from types import SimpleNamespace
 from typing import Any
 from dotenv import load_dotenv
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 class APIService:
     """
@@ -37,12 +45,26 @@ class APIService:
                 "answer": answer
             }
             
+            # Log the payload for debugging
+            logger.info(f"Submitting to URL: {self.base_url}")
+            logger.info(f"Headers: {headers}")
+            logger.info(f"Payload: {payload}")
+            
             response = requests.post(self.base_url, json=payload, headers=headers)
+            
+            # Log the response
+            logger.info(f"Response status: {response.status_code}")
+            logger.info(f"Response content: {response.text}")
+            
             response.raise_for_status()
             
             data = response.json()
             
-            return data
+            # Convert successful response to SimpleNamespace
+            return SimpleNamespace(
+                success=True,
+                data=data
+            )
                 
         except requests.exceptions.RequestException as e:
             return SimpleNamespace(

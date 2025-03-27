@@ -16,7 +16,8 @@ class FileService:
     def _get_root_dir(self) -> str:
         """Get the root directory of the project."""
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        return os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))
+        # Go down to AI-Devs-3-Solutions-App directory
+        return os.path.dirname((os.path.dirname(current_dir)))
 
     def read_file(self, file_path: str) -> SimpleNamespace:
         """

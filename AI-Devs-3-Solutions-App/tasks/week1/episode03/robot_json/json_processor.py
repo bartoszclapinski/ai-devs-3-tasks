@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import logging
 from typing import Dict, Any, List, Tuple, Optional
@@ -59,6 +60,14 @@ class JSONProcessor:
             self._log("Processing JSON data", callback)
             self._process_data(data, callback)
             
+            # Save API key to file
+            api_key = os.getenv("AI_DEVS_3_API_KEY")
+            if api_key:
+                data["apikey"] = api_key
+                self._log("🔑 API key saved to data", callback, log_type="info")
+            else:
+                self._log("No AI_DEVS_3_API_KEY found in environment", callback, log_type="error")
+
             # Save the processed data
             self._log(f"Saving processed JSON to {output_path}", callback)
             with open(output_path, 'w', encoding='utf-8') as f:

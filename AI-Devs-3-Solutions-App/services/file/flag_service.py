@@ -1,10 +1,15 @@
 import os
 import re
 import datetime
+import logging
 from types import SimpleNamespace
 from typing import Optional, List, Dict, Any
 
 from .file_service import FileService
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class FlagService:
     """
@@ -16,6 +21,7 @@ class FlagService:
     def __init__(self):
         self.file_service = FileService()
         self.flags_file = os.path.join(self.file_service.storage_dir, "flags.md")
+        logger.info(f"FlagService initialized with flags_file path: {self.flags_file}")
     
     def save_flag(self, week: int, episode: int, flag: str, source: str = None) -> SimpleNamespace:
         """
@@ -31,8 +37,11 @@ class FlagService:
             SimpleNamespace with success status and optional error message
         """
         try:
+            logger.info(f"Attempting to save flag: week={week}, episode={episode}, flag={flag}, source={source}")
+            
             # Check if flag already exists
             if self.check_flag_exists(week, episode, flag):
+                logger.info(f"Flag {{{{FLG:{flag}}}}} already exists for Week {week}, Episode {episode}")
                 return SimpleNamespace(
                     success=False, 
                     error=f"Flag {{{{FLG:{flag}}}}} already exists for Week {week}, Episode {episode}"
@@ -48,25 +57,33 @@ class FlagService:
                 episode_names = {
                     1: "Robot Login",
                     2: "Robot Verify",
+                    3: "Robot Knowledge",
                     # Add more episode names as needed
                 }
                 source = episode_names.get(episode, f"Episode {episode}")
             
             # Format flag entry
             flag_entry = f"- {{{{FLG:{flag}}}}} ({source}, data: {date_str})\n"
+            logger.info(f"Formatted flag entry: {flag_entry}")
             
             # Check if file exists
             if not self.file_service.file_exists(self.flags_file):
+                logger.info(f"Creating new flags file at: {self.flags_file}")
                 # Create new file with header structure
                 content = "# Znalezione flagi\n\n"
-                self.file_service.write_file(self.flags_file, content)
+                result = self.file_service.write_file(self.flags_file, content)
+                if not result.success:
+                    logger.error(f"Failed to create flags file: {result.error}")
+                    return result
             
             # Read existing content
             result = self.file_service.read_file(self.flags_file)
             if not result.success:
+                logger.error(f"Failed to read flags file: {result.error}")
                 return result
             
             content = result.content
+            logger.info(f"Current content length: {len(content)}")
             
             # Check if week section exists
             week_header = f"## Week {week}"
@@ -79,6 +96,7 @@ class FlagService:
             episode_match = re.search(episode_pattern, content)
             
             if not week_match:
+                logger.info(f"Week {week} section not found, adding new section")
                 # Add week section at the end
                 if not content.endswith("\n\n"):
                     content += "\n\n"
@@ -90,6 +108,7 @@ class FlagService:
                 # Add flag
                 content += flag_entry
             elif not episode_match:
+                logger.info(f"Episode {episode} section not found, adding new section")
                 # Find position after week header
                 week_pos = week_match.end()
                 
@@ -107,6 +126,7 @@ class FlagService:
                     # Add episode section at the end of the week
                     content += f"\n{episode_header}\n\n{flag_entry}\n"
             else:
+                logger.info(f"Found existing episode section, adding flag")
                 # Find position after episode header
                 episode_pos = episode_match.end()
                 
@@ -125,9 +145,16 @@ class FlagService:
                     content += f"{flag_entry}\n"
             
             # Write updated content
-            return self.file_service.write_file(self.flags_file, content)
+            logger.info(f"Writing updated content to flags file")
+            result = self.file_service.write_file(self.flags_file, content)
+            if not result.success:
+                logger.error(f"Failed to write flags file: {result.error}")
+            else:
+                logger.info("Successfully saved flag")
+            return result
             
         except Exception as e:
+            logger.error(f"Error saving flag: {str(e)}")
             return SimpleNamespace(success=False, error=str(e))
     
     def get_flag(self, week: int, episode: int, flag_name: str = None) -> SimpleNamespace:

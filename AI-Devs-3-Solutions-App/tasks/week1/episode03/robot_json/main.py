@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 import json
 from services.llm import LLMFactory
 from services.api import APIService
+from services.file import FlagService
+from datetime import datetime
 
 from .download_task import download_task_file
 from .json_processor import JSONProcessor
@@ -33,10 +35,11 @@ class RobotKnowledgeAutomation:
         """
         self.model_name = model_name
         self.llm = LLMFactory.create(model_name)
+        # Load environment variables first
+        load_dotenv()
         self.api_key = os.getenv("AI_DEVS_3_API_KEY")
         self.api_service = APIService()
-        # Load environment variables
-        load_dotenv()
+        
         if not self.api_key:
             logger.error("No AI_DEVS_3_KEY found. Set the AI_DEVS_3_KEY environment variable or add it to the .env file")
         
@@ -138,18 +141,36 @@ class RobotKnowledgeAutomation:
             SimpleNamespace with success status and flag if available
         """
         try:
-            # Read the processed file
+            # Read the processed file as JSON
             with open(file_path, 'r', encoding='utf-8') as f:
-                data_str = f.read()
+                data = json.load(f)
+            
+            # Log the data being sent (first part only)
+            logger.info("Processed data to be sent (first 200 chars):")
+            logger.info(str(data)[:200] + "...")
             
             # Submit answer using APIService
             self._log(f"Submitting solution...", callback)
-            result = self.api_service.submit_answer("JSON", data_str)
+            result = self.api_service.submit_answer("JSON", data)
             
             if result.success:
-                if "FLG" in result.data:
-                    flag = result.data["flag"]
+                # Check for flag in message
+                if "message" in result.data and "FLG:" in result.data["message"]:
+                    flag = result.data["message"].split("FLG:")[1].strip("{}")
                     self._log(f"Submission successful! Flag: {flag}", callback, log_type="success")
+                    
+                    # Save flag using FlagService
+                    flag_service = FlagService()
+                    save_result = flag_service.save_flag(
+                        week=1,
+                        episode=3,
+                        flag=flag,
+                        source="Robot Knowledge task"
+                    )
+                    
+                    if not save_result.success:
+                        self._log(f"Warning: Failed to save flag: {save_result.error}", callback, log_type="warning")
+                    
                     return SimpleNamespace(success=True, flag=flag)
                 else:
                     self._log("Submission successful but no flag returned", callback, log_type="warning")
