@@ -1,0 +1,1 @@
+# Pusty plik inicjalizacyjny 

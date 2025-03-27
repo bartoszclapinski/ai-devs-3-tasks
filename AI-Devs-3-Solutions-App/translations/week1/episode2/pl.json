@@ -1,0 +1,29 @@
+{
+    "title": "Epizod 2 - Robot Verify",
+    "subtitle": "Cel zadania:",
+    "description": "Przygotować algorytm do przechodzenia weryfikacji tożsamości robota.",
+    "tabs": {
+        "requirements": "📋 Wymagania",
+        "solution": "💡 Rozwiązanie",
+        "task": "📝 Treść zadania"
+    },
+    "content": {
+        "requirements": "Stworzyć system weryfikacji poprzez:\n- Analizę zrzutu pamięci robota\n- Obsługę procesu weryfikacji\n- Odpowiadanie na pytania zgodnie z kontekstem",
+        "solution": "### Implementacja:\n\n1. **Przygotowanie komunikacji**\n    - Tworzymy sesję HTTP do komunikacji z API weryfikacyjnym\n    - Wysyłamy polecenie READY, aby rozpocząć weryfikację\n\n2. **Obsługa pytań**\n    - Analizujemy otrzymane pytanie\n    - Sprawdzamy, czy dotyczy ono specjalnych przypadków (fałszywe informacje)\n    - Jeśli tak, zwracamy fałszywą odpowiedź (np. stolica Polski to Kraków)\n    - Jeśli nie, używamy modelu LLM do wygenerowania odpowiedzi\n\n3. **Weryfikacja**\n    - Wysyłamy odpowiedź z zachowaniem identyfikatora wiadomości\n    - Sprawdzamy, czy weryfikacja zakończyła się sukcesem\n    - Jeśli tak, zapisujemy flagę\n\n4. **Obsługa błędów**\n    - W przypadku niepowodzenia, próbujemy ponownie rozpocząć weryfikację\n    - Logujemy wszystkie kroki procesu"
+    },
+    "implementation": {
+        "title": "Implementacja rozwiązania:",
+        "description": "Rozwiązanie automatycznie wykonuje wszystkie kroki wymagane do przejścia weryfikacji tożsamości robota. Program analizuje pytania i odpowiada zgodnie z wiedzą robota, w tym z fałszywymi informacjami (np. stolica Polski to Kraków).",
+        "select_model": "Wybierz model LLM:",
+        "run_button": "🚀 Uruchom weryfikację"
+    },
+    "status": {
+        "running": "Uruchamianie weryfikacji robota...",
+        "success": "Weryfikacja zakończona sukcesem!",
+        "error": "Weryfikacja nie powiodła się:"
+    },
+    "task": {
+        "title": "Cel zadania:",
+        "content": "**Cel zadania:**\n\nOstatnio zdobyłeś zrzut pamięci robota patrolującego teren. Użyj wiedzy pozyskanej z tego zrzutu do przygotowania dla nas algorytmu do przechodzenia weryfikacji tożsamości. To niezbędne, aby ludzie mogli podawać się za roboty.\n\n**Wymagania:**\n\n1. Zapoznać się z plikiem TXT zdobytym wczoraj\n2. Przeanalizować proces weryfikacji człowieka/robota\n3. Wysłać polecenie READY do robota (endpoint /verify)\n4. Odpowiadać na pytania zgodnie z kontekstem ze zrzutu pamięci\n5. Obsłużyć przypadki nieprawdziwych informacji (np. stolica Polski to 'KRAKÓW')\n\n**Uwagi:**\n- Pytania zmieniają się dynamicznie\n- Wymagane jest zapamiętanie identyfikatora wiadomości\n- Po poprawnej weryfikacji otrzymasz FLAGĘ"
+    }
+} 

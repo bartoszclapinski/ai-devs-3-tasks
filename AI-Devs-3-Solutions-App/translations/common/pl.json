@@ -1,0 +1,48 @@
+{
+    "common": {
+        "select_week": "Wybierz tydzień",
+        "choose_week": "Wybierz tydzień",
+        "select_episode": "Wybierz epizod",
+        "choose_episode": "Wybierz epizod"
+    },
+    "sidebar": {
+        "centrala_button": "Centrala AI Devs",
+        "courses_button": "Brave Courses",
+        "files_button": "📁 Pokaż pobrane pliki",
+        "flags_button": "🏆 Pokaż znalezione flagi"
+    },
+    "welcome_view": {
+        "title": "🚀 Witaj Agencie! 🤖",
+        "subtitle": "To jest aplikacja do rozwiązywania zadań z kursu AI Devs 3.",
+        "how_to_start": {
+            "title": "Jak zacząć?",
+            "steps": [
+                "📋 Wybierz tydzień z menu po lewej stronie",
+                "✏️ Wybierz zadanie do rozwiązania",
+                "▶️ Uruchom rozwiązanie i obserwuj postęp"
+            ]
+        },
+        "features": {
+            "title": "Dostępne funkcje",
+            "list": [
+                "🏆 Przeglądanie znalezionych flag",
+                "📁 Przeglądanie pobranych plików",
+                "🤖 Automatyczne rozwiązywanie zadań"
+            ]
+        },
+        "links": {
+            "title": "Linki",
+            "aidevs_website": "AI Devs Website",
+            "aidevs_linkedin": "AI Devs Linkedin",
+            "author_linkedin": "Author Linkedin"
+        }
+    },
+    "files_viewer": {
+        "title": "📁 Pobrane pliki",
+        "no_files": "Nie znaleziono żadnych plików."
+    },
+    "flags_viewer": {
+        "title": "🏆 Znalezione flagi",
+        "no_flags": "Nie znaleziono jeszcze żadnych flag."
+    }
+} 
